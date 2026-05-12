@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk git *)",
+      "Bash(git remote *)",
+      "Bash(git init *)"
+    ]
+  },
+  "disabledMcpjsonServers": [
+    "neon"
+  ]
+}
