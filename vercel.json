@@ -2,10 +2,21 @@
   "version": 2,
   "builds": [
     { "src": "server.js", "use": "@vercel/node" },
-    { "src": "**/*.{html,css,js,png,jpg,jpeg,svg,gif}", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "style.css", "use": "@vercel/static" },
+    { "src": "script.js", "use": "@vercel/static" },
+    { "src": "admin.html", "use": "@vercel/static" },
+    { "src": "admin.css", "use": "@vercel/static" },
+    { "src": "admin.js", "use": "@vercel/static" },
+    { "src": "logo.jpeg", "use": "@vercel/static" },
+    { "src": "logo.svg", "use": "@vercel/static" },
+    { "src": "logo-removebg-preview.png", "use": "@vercel/static" },
+    { "src": "logo sem fundo.png", "use": "@vercel/static" },
+    { "src": "Gravando 2026-04-28 164649.gif", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/server.js" },
+    { "src": "/", "dest": "/index.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
