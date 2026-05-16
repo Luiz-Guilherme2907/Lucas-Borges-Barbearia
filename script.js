@@ -115,6 +115,63 @@ function initScrollCuts() {
   sections.forEach(s => cutObs.observe(s));
 }
 
+// ── GALERIA DINÂMICA ──
+(function () {
+  const grid = document.getElementById('galeria-grid');
+  if (!grid) return;
+
+  let todasFotos = [];
+  let catAtiva = 'todas';
+
+  async function carregarGaleria() {
+    try {
+      const r = await fetch('/api/fotos');
+      if (!r.ok) throw new Error();
+      todasFotos = await r.json();
+    } catch {
+      todasFotos = [];
+    }
+    renderGaleria();
+  }
+
+  function renderGaleria() {
+    const filtered = catAtiva === 'todas' ? todasFotos : todasFotos.filter(f => f.categoria === catAtiva);
+    grid.innerHTML = '';
+
+    if (!filtered.length) {
+      grid.innerHTML = '<div class="galeria-item galeria-placeholder-item"><div class="galeria-placeholder"><span>📷</span><p>Em breve</p></div></div>';
+      return;
+    }
+
+    filtered.forEach(foto => {
+      const item = document.createElement('div');
+      item.className = 'galeria-item';
+      item.innerHTML = `
+        <img src="${foto.url}" alt="${foto.titulo || ''}" loading="lazy" />
+        <div class="galeria-label-overlay">${foto.titulo || ''}</div>
+      `;
+      grid.appendChild(item);
+    });
+
+    // re-observar reveal
+    grid.querySelectorAll('.galeria-item img').forEach(img => {
+      img.onerror = function () { this.closest('.galeria-item').remove(); };
+    });
+  }
+
+  // filtros
+  document.querySelectorAll('.gal-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.gal-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      catAtiva = btn.dataset.cat;
+      renderGaleria();
+    });
+  });
+
+  carregarGaleria();
+})();
+
 // ── MOBILE NAV TOGGLE ──
 const hamburger = document.querySelector('.nav-hamburger');
 const navMenu = document.getElementById('nav-menu');

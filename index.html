@@ -167,28 +167,24 @@
       <p class="overline">Trabalhos</p>
       <h2 class="section-title">Resultados que<br><em>falam por si</em></h2>
     </div>
-    <div class="galeria-grid reveal">
-      <div class="galeria-item">
-        <div class="galeria-placeholder"><span>✂</span><p>Corte + Fade</p></div>
-        <div class="galeria-label-overlay">Degradê completo</div>
-      </div>
-      <div class="galeria-item">
-        <div class="galeria-placeholder"><span>🧔</span><p>Barba</p></div>
-        <div class="galeria-label-overlay">Barba modelada</div>
-      </div>
-      <div class="galeria-item">
-        <div class="galeria-placeholder"><span>💈</span><p>Ambiente</p></div>
-        <div class="galeria-label-overlay">Espaço VIP</div>
-      </div>
-      <div class="galeria-item">
-        <div class="galeria-placeholder"><span>⭐</span><p>Before/After</p></div>
-        <div class="galeria-label-overlay">Transformação</div>
-      </div>
-      <div class="galeria-item">
-        <div class="galeria-placeholder"><span>✨</span><p>Acabamento</p></div>
-        <div class="galeria-label-overlay">Detalhe fino</div>
+
+    <!-- Filtros de categoria -->
+    <div class="galeria-filtros reveal">
+      <button class="gal-filter active" data-cat="todas">Todos</button>
+      <button class="gal-filter" data-cat="corte">✂ Corte</button>
+      <button class="gal-filter" data-cat="barba">🧔 Barba</button>
+      <button class="gal-filter" data-cat="ambiente">💈 Ambiente</button>
+      <button class="gal-filter" data-cat="antes_depois">⭐ Before/After</button>
+      <button class="gal-filter" data-cat="acabamento">✨ Acabamento</button>
+    </div>
+
+    <div class="galeria-grid reveal" id="galeria-grid">
+      <!-- preenchido dinamicamente por script.js -->
+      <div class="galeria-item galeria-placeholder-item">
+        <div class="galeria-placeholder"><span>✂</span><p>Carregando...</p></div>
       </div>
     </div>
+
     <div class="galeria-footer reveal">
       <a class="btn-secondary" href="https://www.instagram.com/_lucasthebarber" target="_blank" rel="noopener">Ver mais no @_lucasthebarber</a>
     </div>

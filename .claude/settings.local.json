@@ -3,7 +3,8 @@
     "allow": [
       "Bash(rtk git *)",
       "Bash(git remote *)",
-      "Bash(git init *)"
+      "Bash(git init *)",
+      "Bash(python scripts/search.py \"barbershop admin dashboard dark luxury\" --design-system -p \"Borges Barber Admin\")"
     ]
   },
   "disabledMcpjsonServers": [

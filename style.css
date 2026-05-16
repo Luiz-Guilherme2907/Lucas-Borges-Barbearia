@@ -343,20 +343,46 @@ section { padding: 7rem 4rem; }
 
 /* ── GALERIA ── */
 #galeria { background: var(--ink2); }
-.galeria-header { margin-bottom: 3rem; }
+.galeria-header { margin-bottom: 2rem; }
+
+/* filtros */
+.galeria-filtros {
+  display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem;
+}
+.gal-filter {
+  background: transparent;
+  border: 1px solid oklch(96% 0.008 80 / .12);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: .35rem .9rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: .78rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.gal-filter:hover { border-color: var(--gold); color: var(--cream); }
+.gal-filter.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+
+/* grid */
 .galeria-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 220px 220px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
+  min-height: 240px;
 }
 .galeria-item {
   background: var(--ink3); overflow: hidden;
   position: relative; cursor: pointer;
-  transition: opacity .3s var(--expo);
+  aspect-ratio: 4/3;
+  transition: opacity .3s var(--expo), transform .3s var(--expo);
+  border-radius: 4px;
 }
-.galeria-item:hover { opacity: .85; }
-.galeria-item:nth-child(1) { grid-row: 1 / 3; }
+.galeria-item:hover { opacity: .88; transform: scale(1.015); }
+.galeria-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.galeria-placeholder-item { aspect-ratio: 4/3; }
 .galeria-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
@@ -370,14 +396,18 @@ section { padding: 7rem 4rem; }
 .galeria-label-overlay {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: .8rem 1rem;
-  background: linear-gradient(to top, oklch(14% 0.012 60 / .8), transparent);
+  background: linear-gradient(to top, oklch(14% 0.012 60 / .85), transparent);
   font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
-  color: oklch(72% 0.12 75 / .8);
-  opacity: 0; transition: opacity .3s var(--expo); transform: translateY(4px);
+  color: oklch(72% 0.12 75 / .9);
+  opacity: 0; transform: translateY(4px);
   transition: opacity .3s var(--expo), transform .3s var(--expo);
 }
 .galeria-item:hover .galeria-label-overlay { opacity: 1; transform: translateY(0); }
 .galeria-footer { margin-top: 2rem; }
+
+@media (max-width: 600px) {
+  .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
 /* ── DEPOIMENTOS ── */
 #depoimentos { overflow: hidden; background: var(--ink); }
