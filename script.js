@@ -125,7 +125,7 @@ function initScrollCuts() {
 
   async function carregarGaleria() {
     try {
-      const r = await fetch('/api/fotos');
+      const r = await fetch('/api/fotos', { cache: 'no-store' });
       if (!r.ok) throw new Error();
       todasFotos = await r.json();
     } catch {

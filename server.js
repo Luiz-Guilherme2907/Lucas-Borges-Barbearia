@@ -70,6 +70,7 @@ app.get('/api/fotos', async (req, res) => {
     const rows = categoria
       ? await sql`SELECT * FROM fotos WHERE ativa = true AND categoria = ${categoria} ORDER BY ordem ASC, criado_em DESC`
       : await sql`SELECT * FROM fotos WHERE ativa = true ORDER BY categoria, ordem ASC, criado_em DESC`;
+    res.set('Cache-Control', 'no-store');
     res.json(rows);
   } catch (e) {
     res.status(500).json({ error: e.message });
