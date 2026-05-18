@@ -72,6 +72,7 @@ async function auth(req, res, next) {
 }
 
 function isValidUrl(str) {
+  if (/^data:image\/(jpeg|jpg|png|gif|webp|svg\+xml);base64,/.test(str)) return true;
   try {
     const u = new URL(str);
     return u.protocol === 'http:' || u.protocol === 'https:';
