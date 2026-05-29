@@ -12,7 +12,10 @@
     { "src": "logo.svg", "use": "@vercel/static" },
     { "src": "logo-removebg-preview.png", "use": "@vercel/static" },
     { "src": "logo sem fundo.png", "use": "@vercel/static" },
-    { "src": "Gravando 2026-04-28 164649.gif", "use": "@vercel/static" }
+    { "src": "Gravando 2026-04-28 164649.gif", "use": "@vercel/static" },
+    { "src": "fundo 01.jpeg", "use": "@vercel/static" },
+    { "src": "fundo 02.jpeg", "use": "@vercel/static" },
+    { "src": "fundo 03.jpeg", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/server.js" },
