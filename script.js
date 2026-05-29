@@ -172,16 +172,14 @@ function initScrollCuts() {
   carregarGaleria();
 })();
 
-// ── HERO BUBBLES — mobile tap highlight ──
+// ── HERO BUBBLES — click para destaque permanente (toggle independente por bolha) ──
 (function () {
   const bubbles = document.querySelectorAll('.hero-bubble');
   if (!bubbles.length) return;
 
   bubbles.forEach(bubble => {
     bubble.addEventListener('click', e => {
-      const wasActive = bubble.classList.contains('bubble-active');
-      bubbles.forEach(b => b.classList.remove('bubble-active'));
-      if (!wasActive) bubble.classList.add('bubble-active');
+      bubble.classList.toggle('bubble-active');
       e.stopPropagation();
     });
   });
