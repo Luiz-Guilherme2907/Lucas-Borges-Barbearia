@@ -172,6 +172,25 @@ function initScrollCuts() {
   carregarGaleria();
 })();
 
+// ── HERO BUBBLES — mobile tap highlight ──
+(function () {
+  const bubbles = document.querySelectorAll('.hero-bubble');
+  if (!bubbles.length) return;
+
+  bubbles.forEach(bubble => {
+    bubble.addEventListener('click', e => {
+      const wasActive = bubble.classList.contains('bubble-active');
+      bubbles.forEach(b => b.classList.remove('bubble-active'));
+      if (!wasActive) bubble.classList.add('bubble-active');
+      e.stopPropagation();
+    });
+  });
+
+  document.addEventListener('click', () => {
+    bubbles.forEach(b => b.classList.remove('bubble-active'));
+  });
+})();
+
 // ── MOBILE NAV TOGGLE ──
 const hamburger = document.querySelector('.nav-hamburger');
 const navMenu = document.getElementById('nav-menu');
