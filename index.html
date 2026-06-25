@@ -120,7 +120,7 @@
         <a class="btn-secondary" href="https://sites.appbarber.com.br/agendamento/barbearianunes-0kug" target="_blank" rel="noopener">Agendar agora</a>
       </div>
       <div class="servico-list reveal">
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_corte_americano" data-nome="Corte Americano">
           <span class="servico-num">01</span>
           <div>
             <div class="servico-name">Corte Americano</div>
@@ -128,7 +128,7 @@
           </div>
           <span class="servico-tag-right">Clássico & limpo</span>
         </div>
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_fade_clean" data-nome="Fade Clean">
           <span class="servico-num">02</span>
           <div>
             <div class="servico-name">Fade Clean</div>
@@ -136,7 +136,7 @@
           </div>
           <span class="servico-tag-right">Técnica dominada</span>
         </div>
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_barba_ozonio" data-nome="Barba com Ozônio">
           <span class="servico-num">03</span>
           <div>
             <div class="servico-name">Barba com Ozônio</div>
@@ -144,7 +144,7 @@
           </div>
           <span class="servico-tag-right">Premium</span>
         </div>
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_corte_afro" data-nome="Corte Afro + Nudred Sponge">
           <span class="servico-num">04</span>
           <div>
             <div class="servico-name">Corte Afro + Nudred Sponge</div>
@@ -152,7 +152,7 @@
           </div>
           <span class="servico-tag-right">Especialidade</span>
         </div>
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_detalhes_finos" data-nome="Detalhes Finos">
           <span class="servico-num">05</span>
           <div>
             <div class="servico-name">Detalhes Finos</div>
@@ -160,7 +160,7 @@
           </div>
           <span class="servico-tag-right">Arte no corte</span>
         </div>
-        <div class="servico-row">
+        <div class="servico-row" data-especialidade="esp_corte_infantil" data-nome="Corte Infantil">
           <span class="servico-num">06</span>
           <div>
             <div class="servico-name">Corte Infantil</div>
@@ -321,6 +321,87 @@
   </footer>
 
   <a class="float-wa" href="https://sites.appbarber.com.br/agendamento/barbearianunes-0kug" target="_blank" rel="noopener" aria-label="Agendar horário">📅</a>
+
+  <!-- CUPOM PRESENTE -->
+  <div id="cupom-overlay" aria-modal="true" role="dialog" aria-label="Você ganhou um presente">
+    <div class="cupom-backdrop"></div>
+
+    <!-- Fase 1: caixa do presente -->
+    <div class="cupom-gift" id="cupom-gift" role="button" tabindex="0" aria-label="Clique para abrir seu presente">
+      <p class="gift-titulo">Você ganhou<br>um presente!</p>
+      <div class="gift-box">
+        <div class="gift-lid">
+          <div class="gift-ribbon-h"></div>
+          <div class="gift-bow">
+            <span></span><span></span>
+          </div>
+        </div>
+        <div class="gift-body">
+          <div class="gift-ribbon-v"></div>
+        </div>
+      </div>
+      <p class="gift-hint">↑ clique para abrir ↑</p>
+    </div>
+
+    <!-- Fase 2: cupom + form -->
+    <div class="cupom-card" id="cupom-card">
+      <div class="cupom-scissors" aria-hidden="true">✂</div>
+      <div class="cupom-dashed-top"></div>
+      <p class="cupom-eyebrow">Borges Barber · presente exclusivo</p>
+      <h2 class="cupom-titulo">Você ganhou um<br><em>Corte de Sobrancelha</em></h2>
+      <p class="cupom-condicao">Se cortar o cabelo com o Lucas em até <strong>3 dias</strong>, o corte de sobrancelha é por nossa conta!</p>
+      <div class="cupom-dashed-bot"></div>
+
+      <form id="cupom-form" novalidate>
+        <div class="cupom-field">
+          <label for="cupom-nome">Nome completo</label>
+          <input id="cupom-nome" name="nome" type="text" placeholder="Seu nome" autocomplete="name" required />
+        </div>
+        <div class="cupom-field">
+          <label for="cupom-tel">WhatsApp / Telefone</label>
+          <input id="cupom-tel" name="telefone" type="tel" placeholder="(48) 99999-9999" autocomplete="tel" required />
+        </div>
+        <p class="cupom-erro" id="cupom-erro" role="alert"></p>
+        <button type="submit" class="cupom-btn">Resgatar meu cupom</button>
+      </form>
+
+      <button class="cupom-fechar" id="cupom-fechar" aria-label="Fechar">×</button>
+    </div>
+
+    <!-- Fase 3: confirmação -->
+    <div class="cupom-sucesso" id="cupom-sucesso">
+      <div class="sucesso-icon">✓</div>
+      <h3>Cupom resgatado!</h3>
+      <p>Não esqueça: <strong>3 dias</strong> a partir de hoje!</p>
+      <a class="cupom-agendar-btn" href="https://sites.appbarber.com.br/barbearianunes-0kug" target="_blank" rel="noopener">
+        Agendar horário para garantir cupom
+      </a>
+    </div>
+  </div>
+
+  <!-- MODAL ESPECIALIDADES -->
+  <div id="esp-modal-overlay" class="esp-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="esp-modal-titulo" hidden>
+    <div class="esp-modal-backdrop"></div>
+    <div class="esp-modal">
+      <div class="esp-modal-header">
+        <h3 id="esp-modal-titulo" class="esp-modal-nome"></h3>
+        <button id="esp-modal-fechar" class="esp-modal-close" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="esp-modal-body">
+        <p id="esp-modal-loading" class="esp-modal-msg">Carregando...</p>
+        <p id="esp-modal-vazio" class="esp-modal-msg" hidden>Nenhuma foto cadastrada ainda.</p>
+        <div id="esp-carousel" class="esp-carousel" hidden>
+          <button class="esp-carousel-btn esp-prev" aria-label="Anterior">&#8249;</button>
+          <div class="esp-carousel-track">
+            <img id="esp-carousel-img" src="" alt="" />
+            <div id="esp-carousel-legenda" class="esp-carousel-legenda"></div>
+          </div>
+          <button class="esp-carousel-btn esp-next" aria-label="Próximo">&#8250;</button>
+          <div id="esp-carousel-dots" class="esp-carousel-dots"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

@@ -6,14 +6,18 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const sql = neon(process.env.DATABASE_URL);
 
-const CATEGORIAS_VALIDAS = ['corte', 'barba', 'ambiente', 'antes_depois', 'acabamento'];
+const CATEGORIAS_VALIDAS = [
+  'corte', 'barba', 'ambiente', 'antes_depois', 'acabamento',
+  'esp_corte_americano', 'esp_fade_clean', 'esp_barba_ozonio',
+  'esp_corte_afro', 'esp_detalhes_finos', 'esp_corte_infantil'
+];
 
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : false,
@@ -48,6 +52,15 @@ async function initDB() {
       token      TEXT PRIMARY KEY,
       expires_at TIMESTAMPTZ NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS cupons (
+      id           SERIAL PRIMARY KEY,
+      nome         TEXT NOT NULL,
+      telefone     TEXT NOT NULL,
+      ip           TEXT NOT NULL UNIQUE,
+      resgatado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
   await sql`DELETE FROM sessions WHERE expires_at < NOW()`;
@@ -101,6 +114,59 @@ app.get('/api/fotos', async (req, res) => {
   } catch (e) {
     console.error('[GET /api/fotos]', e);
     res.status(500).json({ error: 'Erro interno. Tente novamente.' });
+  }
+});
+
+// ── CUPOM ──
+
+const cupomLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 3,
+  keyGenerator: (req) => ipKeyGenerator(req.headers['x-forwarded-for']?.split(',')[0].trim() || req.ip),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Muitas tentativas. Tente novamente em alguns minutos.' }
+});
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  return forwarded ? forwarded.split(',')[0].trim() : req.ip;
+}
+
+app.get('/api/cupom/elegivel', async (req, res) => {
+  const ip = getClientIp(req);
+  try {
+    const [row] = await sql`SELECT id FROM cupons WHERE ip = ${ip}`;
+    res.json({ elegivel: !row });
+  } catch (e) {
+    console.error('[GET /api/cupom/elegivel]', e);
+    res.status(500).json({ error: 'Erro interno.' });
+  }
+});
+
+app.post('/api/cupom/resgatar', cupomLimiter, async (req, res) => {
+  const ip = getClientIp(req);
+  const { nome, telefone } = req.body;
+
+  if (!nome || typeof nome !== 'string' || nome.trim().length < 3) {
+    return res.status(400).json({ error: 'Nome completo obrigatório (mín. 3 caracteres).' });
+  }
+  if (!telefone || typeof telefone !== 'string' || !/^\d{8,15}$/.test(telefone.replace(/\D/g, ''))) {
+    return res.status(400).json({ error: 'Telefone inválido.' });
+  }
+
+  try {
+    await sql`
+      INSERT INTO cupons (nome, telefone, ip)
+      VALUES (${nome.trim()}, ${telefone.trim()}, ${ip})
+    `;
+    res.json({ ok: true });
+  } catch (e) {
+    if (e.code === '23505') {
+      return res.status(409).json({ error: 'Cupom já resgatado por este dispositivo.' });
+    }
+    console.error('[POST /api/cupom/resgatar]', e);
+    res.status(500).json({ error: 'Erro interno.' });
   }
 });
 

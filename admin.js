@@ -185,6 +185,12 @@ const CAT_LABELS = {
   ambiente: '💈 Ambiente',
   antes_depois: '⭐ Before/After',
   acabamento: '✨ Acabamento',
+  esp_corte_americano: '★ Esp: Corte Americano',
+  esp_fade_clean: '★ Esp: Fade Clean',
+  esp_barba_ozonio: '★ Esp: Barba com Ozônio',
+  esp_corte_afro: '★ Esp: Corte Afro + Nudred Sponge',
+  esp_detalhes_finos: '★ Esp: Detalhes Finos',
+  esp_corte_infantil: '★ Esp: Corte Infantil',
 };
 
 async function carregarFotos() {
