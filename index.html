@@ -189,11 +189,16 @@
       <button class="gal-filter" data-cat="acabamento">✨ Acabamento</button>
     </div>
 
-    <div class="galeria-grid reveal" id="galeria-grid">
-      <!-- preenchido dinamicamente por script.js -->
-      <div class="galeria-item galeria-placeholder-item">
-        <div class="galeria-placeholder"><span>✂</span><p>Carregando...</p></div>
+    <div class="galeria-carousel reveal" id="galeria-carousel">
+      <button class="gal-arrow gal-prev" aria-label="Anterior">&#8249;</button>
+      <div class="gal-slide-wrap">
+        <div class="gal-slide" id="gal-slide">
+          <!-- preenchido dinamicamente por script.js -->
+        </div>
+        <div class="gal-label" id="gal-label"></div>
       </div>
+      <button class="gal-arrow gal-next" aria-label="Próximo">&#8250;</button>
+      <div class="gal-dots" id="gal-dots"></div>
     </div>
 
     <div class="galeria-footer reveal">

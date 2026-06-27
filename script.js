@@ -115,13 +115,21 @@ function initScrollCuts() {
   sections.forEach(s => cutObs.observe(s));
 }
 
-// ── GALERIA DINÂMICA ──
+// ── GALERIA — CARROSSEL CENTRALIZADO ──
 (function () {
-  const grid = document.getElementById('galeria-grid');
-  if (!grid) return;
+  const carousel  = document.getElementById('galeria-carousel');
+  if (!carousel) return;
 
-  let todasFotos = [];
-  let catAtiva = 'todas';
+  const slide     = document.getElementById('gal-slide');
+  const label     = document.getElementById('gal-label');
+  const dotsWrap  = document.getElementById('gal-dots');
+  const btnPrev   = carousel.querySelector('.gal-prev');
+  const btnNext   = carousel.querySelector('.gal-next');
+
+  let todasFotos  = [];
+  let filtradas   = [];
+  let catAtiva    = 'todas';
+  let indiceAtual = 0;
 
   async function carregarGaleria() {
     try {
@@ -131,33 +139,79 @@ function initScrollCuts() {
     } catch {
       todasFotos = [];
     }
-    renderGaleria();
+    renderCarrossel();
   }
 
-  function renderGaleria() {
-    const filtered = catAtiva === 'todas' ? todasFotos : todasFotos.filter(f => f.categoria === catAtiva);
-    grid.innerHTML = '';
+  function renderCarrossel() {
+    filtradas = catAtiva === 'todas' ? todasFotos : todasFotos.filter(f => f.categoria === catAtiva);
+    indiceAtual = 0;
 
-    if (!filtered.length) {
-      grid.innerHTML = '<div class="galeria-item galeria-placeholder-item"><div class="galeria-placeholder"><span>📷</span><p>Em breve</p></div></div>';
+    dotsWrap.innerHTML = '';
+
+    if (!filtradas.length) {
+      slide.innerHTML = '<div class="galeria-placeholder"><span>📷</span><p>Em breve</p></div>';
+      label.textContent = '';
+      btnPrev.hidden = true;
+      btnNext.hidden = true;
       return;
     }
 
-    filtered.forEach(foto => {
-      const item = document.createElement('div');
-      item.className = 'galeria-item';
-      item.innerHTML = `
-        <img src="${foto.url}" alt="${foto.titulo || ''}" loading="lazy" />
-        <div class="galeria-label-overlay">${foto.titulo || ''}</div>
-      `;
-      grid.appendChild(item);
+    btnPrev.hidden = false;
+    btnNext.hidden = false;
+
+    filtradas.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'gal-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Foto ${i + 1}`);
+      dot.addEventListener('click', () => mostrarSlide(i));
+      dotsWrap.appendChild(dot);
     });
 
-    // re-observar reveal
-    grid.querySelectorAll('.galeria-item img').forEach(img => {
-      img.onerror = function () { this.closest('.galeria-item').remove(); };
+    mostrarSlide(0);
+  }
+
+  function mostrarSlide(i) {
+    indiceAtual = (i + filtradas.length) % filtradas.length;
+    const foto = filtradas[indiceAtual];
+
+    const img = document.createElement('img');
+    img.src = foto.url;
+    img.alt = foto.titulo || '';
+    img.loading = 'lazy';
+    img.style.opacity = '0';
+    img.onload = () => { img.style.opacity = '1'; };
+    img.onerror = () => {
+      filtradas.splice(indiceAtual, 1);
+      renderCarrossel();
+    };
+
+    slide.innerHTML = '';
+    slide.appendChild(img);
+    label.textContent = foto.titulo || '';
+
+    dotsWrap.querySelectorAll('.gal-dot').forEach((d, idx) => {
+      d.classList.toggle('active', idx === indiceAtual);
     });
   }
+
+  btnPrev.addEventListener('click', () => mostrarSlide(indiceAtual - 1));
+  btnNext.addEventListener('click', () => mostrarSlide(indiceAtual + 1));
+
+  // teclado
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  mostrarSlide(indiceAtual - 1);
+    if (e.key === 'ArrowRight') mostrarSlide(indiceAtual + 1);
+  });
+
+  // swipe touch
+  let touchX = null;
+  carousel.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  carousel.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const delta = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) mostrarSlide(indiceAtual + (delta > 0 ? 1 : -1));
+    touchX = null;
+  }, { passive: true });
 
   // filtros
   document.querySelectorAll('.gal-filter').forEach(btn => {
@@ -165,7 +219,7 @@ function initScrollCuts() {
       document.querySelectorAll('.gal-filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       catAtiva = btn.dataset.cat;
-      renderGaleria();
+      renderCarrossel();
     });
   });
 
